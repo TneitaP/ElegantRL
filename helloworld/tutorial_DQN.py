@@ -27,7 +27,12 @@ def train_dqn_for_cartpole(gpu_id=0):
     args.gamma = 0.95  # discount factor of future rewards
 
     train_agent(args)
-
+    if input("| Press 'y' to load actor.pth and render:"):
+        args.cwd = os.getcwd() + f'\\{args.env_name}_{args.agent_class.__name__[5:]}_{args.random_seed}'
+        
+        actor_name = sorted([s for s in os.listdir(args.cwd) if s[-4:] == '.pth'])[-1]
+        actor_path = f"{args.cwd}/{actor_name}"
+        render_agent(env_class, env_args, args.net_dims, agent_class, actor_path)
 
 def train_dqn_for_lunar_lander(gpu_id=0):
     agent_class = AgentDQN  # DRL algorithm
@@ -50,8 +55,11 @@ def train_dqn_for_lunar_lander(gpu_id=0):
     args.explore_rate = 0.1  # the probability of choosing action randomly in epsilon-greedy
     args.net_dims = (128, 64)  # the middle layer dimension of Fully Connected Network
 
-    train_agent(args)
+    # train_agent(args)
+    # if input("| Press 'y' to load actor.pth and render:"):
     if input("| Press 'y' to load actor.pth and render:"):
+        args.cwd = os.getcwd() + f'\\{args.env_name}_{args.agent_class.__name__[5:]}_{args.random_seed}'
+        
         actor_name = sorted([s for s in os.listdir(args.cwd) if s[-4:] == '.pth'])[-1]
         actor_path = f"{args.cwd}/{actor_name}"
         render_agent(env_class, env_args, args.net_dims, agent_class, actor_path)
@@ -59,5 +67,5 @@ def train_dqn_for_lunar_lander(gpu_id=0):
 
 if __name__ == "__main__":
     GPU_ID = 0
-    train_dqn_for_cartpole(GPU_ID)
+    # train_dqn_for_cartpole(GPU_ID)
     train_dqn_for_lunar_lander(GPU_ID)
